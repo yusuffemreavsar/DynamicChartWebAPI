@@ -12,7 +12,7 @@ namespace Business.Concrete
         {
             if (_dbContext != null) return true;
 
-            _connectionString = $"Server={dataBaseConnectionInfoRequestDto.ServerName};Database={dataBaseConnectionInfoRequestDto.DatabaseName};User Id={dataBaseConnectionInfoRequestDto.Username};Password={dataBaseConnectionInfoRequestDto.Password};";
+            _connectionString = $"Server={dataBaseConnectionInfoRequestDto.ServerName};Database={dataBaseConnectionInfoRequestDto.DatabaseName};User Id={dataBaseConnectionInfoRequestDto.Username};Password={dataBaseConnectionInfoRequestDto.Password};Trusted_Connection=False;Encrypt=True;TrustServerCertificate=True;";
             _dbContext = new DynamicChartAppContext(_connectionString);
 
             try
