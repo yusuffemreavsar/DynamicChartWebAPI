@@ -18,7 +18,7 @@ namespace DynamicChartWebAPI.Controllers
 
             if (isConnected)
             {
-                return Ok(new { message = "Successfully connected to the database!!" });
+                return Ok(new { message = $"{dataBaseConnectionInfoRequestDto.DatabaseName} Successfully connected to the database!!" });
             }
             else
             {

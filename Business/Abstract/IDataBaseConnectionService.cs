@@ -1,12 +1,12 @@
 ﻿using Business.Dtos.DataBaseConnectionInfo;
-using DataAccess.Concrete;
+using Microsoft.EntityFrameworkCore;
 
 namespace Business.Abstract
 {
     public interface IDataBaseConnectionService
     {
         Task<bool> ConnectToDatabaseAsync(DataBaseConnectionInfoRequestDto dataBaseConnectionInfoRequestDto);
-        DynamicChartAppContext GetDbContext();
+        DbContext GetDbContext();
         void DisconnectDatabase();
     }
 }

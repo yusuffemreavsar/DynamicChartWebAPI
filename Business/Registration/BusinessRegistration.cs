@@ -1,6 +1,5 @@
 ﻿using Business.Abstract;
 using Business.Concrete;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Business.Registration
@@ -9,7 +8,8 @@ namespace Business.Registration
     {
         public static void AddBusinessServices(this IServiceCollection services)
         {
-            services.AddSingleton<IDataBaseConnectionService, DataBaseConnectionService>();
+            services.AddTransient<IDataBaseConnectionService, DataBaseConnectionService>();
+            
         }
     }
 }

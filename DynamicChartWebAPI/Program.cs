@@ -1,9 +1,11 @@
 using Business.Registration;
+using DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddBusinessServices();
+builder.Services.AddDataAccessServices(builder.Configuration);
 builder.Services.AddControllers();
 
 builder.Services.AddSwaggerGen();

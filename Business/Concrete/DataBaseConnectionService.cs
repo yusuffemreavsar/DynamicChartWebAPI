@@ -1,19 +1,39 @@
 ﻿using Business.Abstract;
 using Business.Dtos.DataBaseConnectionInfo;
-using DataAccess.Concrete;
+using DataAccess.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace Business.Concrete
 {
     public class DataBaseConnectionService : IDataBaseConnectionService
     {
-        private DynamicChartAppContext _dbContext;
+        private DbContext _dbContext;
         private string _connectionString;
+
+        public AStoreDbContext _aStoreDbContext { get; }
+        public BStoreDbContext _bStoreDbContext { get; }
+
+        public DataBaseConnectionService(AStoreDbContext aStoreDbContext , BStoreDbContext bStoreDbContext)
+        {
+            _aStoreDbContext = aStoreDbContext;
+            _bStoreDbContext = bStoreDbContext;
+        }
         public async Task<bool> ConnectToDatabaseAsync(DataBaseConnectionInfoRequestDto dataBaseConnectionInfoRequestDto)
         {
             if (_dbContext != null) return true;
 
             _connectionString = $"Server={dataBaseConnectionInfoRequestDto.ServerName};Database={dataBaseConnectionInfoRequestDto.DatabaseName};User Id={dataBaseConnectionInfoRequestDto.Username};Password={dataBaseConnectionInfoRequestDto.Password};Trusted_Connection=False;Encrypt=True;TrustServerCertificate=True;";
-            _dbContext = new DynamicChartAppContext(_connectionString);
+            if (dataBaseConnectionInfoRequestDto != null) {
+            
+            if(dataBaseConnectionInfoRequestDto.ServerName == "AStoreDbContext")
+             {
+                    _dbContext = _aStoreDbContext;
+             }
+            if (dataBaseConnectionInfoRequestDto.ServerName == "AStoreDbContext")
+                {
+                    _dbContext = _bStoreDbContext;
+                }
+            }
 
             try
             {
@@ -26,7 +46,7 @@ namespace Business.Concrete
             }
         }
 
-        public DynamicChartAppContext GetDbContext()
+        public DbContext GetDbContext()
         {
             return _dbContext;
         }
