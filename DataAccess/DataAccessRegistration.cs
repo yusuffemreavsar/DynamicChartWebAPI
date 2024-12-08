@@ -8,8 +8,8 @@ namespace DataAccess
         {
             public static void AddDataAccessServices(this IServiceCollection services,IConfiguration configuration)
             {
-            services.AddDbContext<AStoreDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("AStoreDb")));
-            services.AddDbContext<BStoreDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("BStoreDb")));
+            services.AddDbContext<DynamicChartDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("StoreDb")));
+            
 
         }
         }

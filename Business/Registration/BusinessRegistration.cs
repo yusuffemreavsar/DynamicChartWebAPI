@@ -8,7 +8,7 @@ namespace Business.Registration
     {
         public static void AddBusinessServices(this IServiceCollection services)
         {
-            services.AddTransient<IDataBaseConnectionService, DataBaseConnectionService>();
+            services.AddScoped<IDataBaseConnectionService, DataBaseConnectionService>();
             
         }
     }

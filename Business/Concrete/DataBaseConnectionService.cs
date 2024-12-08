@@ -2,37 +2,33 @@
 using Business.Dtos.DataBaseConnectionInfo;
 using DataAccess.Context;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Business.Concrete
 {
     public class DataBaseConnectionService : IDataBaseConnectionService
     {
-        private DbContext _dbContext;
+        private DynamicChartDbContext _dbContext;
         private string _connectionString;
+        private readonly DynamicChartDbContext _dynamicChartDbContext;
+        private readonly IConfiguration _configuration;
 
-        public AStoreDbContext _aStoreDbContext { get; }
-        public BStoreDbContext _bStoreDbContext { get; }
-
-        public DataBaseConnectionService(AStoreDbContext aStoreDbContext , BStoreDbContext bStoreDbContext)
+        public DataBaseConnectionService(DynamicChartDbContext dynamicChartDbContext,IConfiguration configuration)
         {
-            _aStoreDbContext = aStoreDbContext;
-            _bStoreDbContext = bStoreDbContext;
+            _dynamicChartDbContext = dynamicChartDbContext;
+            _configuration = configuration;
         }
-        public async Task<bool> ConnectToDatabaseAsync(DataBaseConnectionInfoRequestDto dataBaseConnectionInfoRequestDto)
+        public async Task<bool> ConnectToDatabaseAsync(DataBaseConnectionInfoRequestDto? dataBaseConnectionInfoRequestDto, string? connectionString)
         {
             if (_dbContext != null) return true;
-
-            _connectionString = $"Server={dataBaseConnectionInfoRequestDto.ServerName};Database={dataBaseConnectionInfoRequestDto.DatabaseName};User Id={dataBaseConnectionInfoRequestDto.Username};Password={dataBaseConnectionInfoRequestDto.Password};Trusted_Connection=False;Encrypt=True;TrustServerCertificate=True;";
-            if (dataBaseConnectionInfoRequestDto != null) {
-            
-            if(dataBaseConnectionInfoRequestDto.ServerName == "AStoreDbContext")
-             {
-                    _dbContext = _aStoreDbContext;
-             }
-            if (dataBaseConnectionInfoRequestDto.ServerName == "AStoreDbContext")
-                {
-                    _dbContext = _bStoreDbContext;
-                }
+            if(dataBaseConnectionInfoRequestDto != null)
+            {
+                _connectionString = $"Server={dataBaseConnectionInfoRequestDto.ServerName};Database={dataBaseConnectionInfoRequestDto.DatabaseName};User Id={dataBaseConnectionInfoRequestDto.Username};Password={dataBaseConnectionInfoRequestDto.Password};Trusted_Connection=False;Encrypt=True;TrustServerCertificate=True;";
+                _dbContext = _dynamicChartDbContext;
+            }
+            if(connectionString != null && connectionString == _configuration.GetConnectionString("StoreDb"))
+            {
+                _dbContext = _dynamicChartDbContext;
             }
 
             try
@@ -46,17 +42,15 @@ namespace Business.Concrete
             }
         }
 
-        public DbContext GetDbContext()
+        public DynamicChartDbContext GetDbContext()
         {
             return _dbContext;
         }
-        public void DisconnectDatabase()
+        public string GetConnectionString()
         {
-            if (_dbContext != null)
-            {
-                _dbContext.Dispose();
-                _dbContext = null;
-            }
+            return _connectionString;
         }
-    }
-}
+  }
+        }
+    
+
